@@ -32,9 +32,8 @@ docker compose down -v
 
 - [x] Deployments via Coolify
 - [x] Containterize it for local development
-- [ ] Health Endpoint
-- [ ] Scaffold UI with mock data
-- [ ] Setup database Postgres via Coolify
+- [x] Health Endpoint
+- [ ] Setup Coolify Postgres database
 - [ ] Attach database to UI
 - [ ] Add authentication
 - [ ] Add book uploading
