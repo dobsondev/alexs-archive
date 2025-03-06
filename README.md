@@ -2,6 +2,29 @@
 
 This application is a storage solution for my own eBook files.
 
+## Authentication
+
+This app leverages [Auth0](https://auth0.com/) which has a generous free tier for Authentication. Also note that we are using the v5 beta of NextAuth.js - which is now known simply as Auth.js. You can find the Auth.js documentation here:
+
+- https://authjs.dev/getting-started
+
+### Required Environment Variables
+
+```
+AUTH_SECRET
+AUTH0_CLIENT_ID
+AUTH0_CLIENT_SECRET
+AUTH0_ISSUER
+```
+
+Auth0 documentation can be found here:
+
+- https://auth0.com/docs
+
+T3 Stack documentation regarding Authentication can be found here (remember to look under the "App Router" section):
+
+- https://create.t3.gg/en/usage/next-auth
+
 ## Local Development
 
 The best way to run the project locally is to use the `docker-compose.yml` file:
@@ -28,23 +51,30 @@ Please note that the Postgres database created by the `docker-compose.yml` file 
 docker compose down -v
 ```
 
+To create a database dump which can be picked up by Docker automatically, use the following command:
+
+```bash
+docker exec -t alexs-archive-db-1 pg_dump -U postgres postgres > docker/initdb/init.sql
+```
+
+This will then be used as the base of the database when you spin up the containers using `docker compose up`.
+
 ## TODOs
 
 - [x] Deployments via Coolify
 - [x] Containterize it for local development
 - [x] Health Endpoint
 - [x] Setup Coolify Postgres database
-- [ ] Mock data
-- [ ] UI with mock data
-- [ ] Attach database to UI
-- [ ] Somthing?
+- [x] Mock data
+- [x] UI with mock data
+- [x] Attach database to UI
 - [ ] Add authentication
 - [ ] Add book uploading
 - [ ] Error management
 - [ ] Add routing / book page (parallel route)
 - [ ] Delete button (w/ Server Actions)
 
-### Create T3 App
+## Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 

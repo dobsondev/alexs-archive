@@ -12,9 +12,6 @@ services:
     environment:
       # We use `db` here since we are doing internal docker DNS
       - DATABASE_URL=postgresql://postgres:devpass@db:5432/postgres
-      - AUTH_SECRET=TB/cF3iVuP+zlk5RAs8QSUWqjb6LJRsw9VkcjOwRKuc=
-      - AUTH_DISCORD_ID=12345
-      - AUTH_DISCORD_SECRET=12345
     depends_on:
       - db
 

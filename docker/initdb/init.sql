@@ -210,7 +210,7 @@ COPY public."alexs-archive_session" (session_token, user_id, expires) FROM stdin
 --
 
 COPY public."alexs-archive_user" (id, name, email, email_verified, image) FROM stdin;
-1	Alex	alex@dobsondev.com	2025-03-05 20:58:07.198471+00	\N
+1	Admin	admin@alexs-archive.org	2025-03-05 20:58:07.198471+00	\N
 \.
 
 

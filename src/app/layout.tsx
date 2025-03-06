@@ -2,6 +2,8 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
+import TopBar from "~/_components/TopBar";
 
 export const metadata: Metadata = {
   title: "Alexs Archive",
@@ -13,10 +15,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
-      <body className="bg-slate-950 text-white">
-        {children}
-      </body>
-    </html>
+    <SessionProvider>
+      <html lang="en" className={`${GeistSans.variable}`}>
+        <body className="bg-slate-950 text-white">
+          <TopBar />
+          {children}
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
