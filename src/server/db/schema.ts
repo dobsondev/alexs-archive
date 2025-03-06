@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   index,
   integer,
   pgTableCreator,
@@ -56,6 +57,7 @@ export const users = createTable("user", {
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar("image", { length: 255 }),
   kindleEmail: varchar("kindle_email", { length: 255 }),
+  uploadPermission: boolean("upload_permission").notNull().default(false),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({

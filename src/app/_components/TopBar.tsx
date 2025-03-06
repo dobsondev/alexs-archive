@@ -10,7 +10,11 @@ export default function TopBar() {
   if (session && session.user) {
     return (
       <header className="flex w-full justify-end border-b-2 border-slate-800 gap-8 p-4">
-        <Link href="/books/upload" className="border-r-2 border-slate-800 pr-8">Upload Book</Link>
+        {session.user.uploadPermission && (
+          <Link href="/books/upload" className="border-r-2 border-slate-800 pr-8">
+            Upload Book
+          </Link>
+        )}
 
         <Dropdown label="" dismissOnClick={false} renderTrigger={() => (
             <div>

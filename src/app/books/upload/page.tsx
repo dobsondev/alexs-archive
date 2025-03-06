@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter, redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Breadcrumbs from "~/app/_components/Breadcrumbs";
 import { UploadButton } from "~/app/_utils/uploadthing";
 
-export default function UploadBookPage() {
+export default async function UploadBookPage() {
   const router = useRouter();
 
   return (
@@ -12,7 +12,7 @@ export default function UploadBookPage() {
       <Breadcrumbs
         breadcrumbs={[
           { 
-            label: 'Books', 
+            label: 'Books',
             href: '/books' 
           },
           {
@@ -43,7 +43,7 @@ export default function UploadBookPage() {
                 
                 if (bookId) {
                   console.log(`Redirecting to book ID: ${bookId}`);
-                  router.push(`/book/${bookId}`);
+                  router.push(`/books/${bookId}`);
                 } else {
                   console.error("Book ID not found in response:", fileData.serverData);
                   alert("Book uploaded but ID not returned. Check console for details.");

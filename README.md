@@ -65,6 +65,12 @@ We are leveraging [Resend](https://resend.com/) for email sending. Emails are us
 3. [Add a domain](https://resend.com/domains)
 4. Setup DNS records for your domain to use Resend
 
+### Resend Environment Variables
+
+```bash
+RESEND_API_KEY=...
+```
+
 ## Local Development
 
 The best way to run the project locally is to use the `docker-compose.yml` file:
@@ -112,10 +118,10 @@ MVP:
 - [x] Add authentication
 - [x] Add Good Reads scraper
 - [x] Add epub uploading (UploadThing)
-- [ ] Add emailing epub to Kindle (Resend)
+- [x] Add emailing epub to Kindle (Resend)
 
 Nice to Have:
-- [ ] Uploading only to select users
+- [x] Uploading only to select users
 - [ ] Help page for how to setup Send-to-Kindle Emails and Approved Emails
 - [ ] Searching
 - [ ] Pagination

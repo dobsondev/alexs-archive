@@ -101,6 +101,10 @@ export default function ProfileSettingsPage() {
             This email is used to send books directly to your Kindle device. 
             You can find your Kindle email in your Amazon account settings.
           </p>
+          <p className="mt-1 text-sm text-slate-400">
+            In order for automatic sending to work, you will need to add <b><u>kindle@alexs-archive.org</u></b> as one of your approved emails on your account. 
+            For more information, please see this link: <a className="hover:underline" href="https://www.amazon.ca/sendtokindle/email" target="_blank">https://www.amazon.ca/sendtokindle/email</a>.
+          </p>
         </div>
         
         <button

@@ -20,15 +20,9 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
+      uploadPermission?: boolean;
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -44,7 +38,7 @@ export const authConfig = {
       issuer: process.env.AUTH0_ISSUER,
       authorization: {
         params: {
-          scope: "openid email profile"
+          scope: "openid email profile",
         }
       }
     })
