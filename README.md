@@ -8,14 +8,25 @@ This app leverages [Auth0](https://auth0.com/) which has a generous free tier fo
 
 - https://authjs.dev/getting-started
 
-### Required Environment Variables
+### Authentication Setup
 
+1. Sign up for an account at [Auth0](https://auth0.com/)
+2. Create your application
+3. Add `http://localhost:3000/api/auth/callback` and `http://localhost:3000/` to your "Callback URLs"
+4. Add `http://localhost:3000/` to your "Logout URLs"
+5. Add required environment variables to `.env.local`
+6. Configure any users in Auth0 that you need, and then login
+
+### Authentication Environment Variables
+
+```bash
+AUTH_SECRET=...
+AUTH0_CLIENT_ID=...
+AUTH0_CLIENT_SECRET=...
+AUTH0_ISSUER=...
 ```
-AUTH_SECRET
-AUTH0_CLIENT_ID
-AUTH0_CLIENT_SECRET
-AUTH0_ISSUER
-```
+
+### More Authentication Documentation
 
 Auth0 documentation can be found here:
 
@@ -24,6 +35,24 @@ Auth0 documentation can be found here:
 T3 Stack documentation regarding Authentication can be found here (remember to look under the "App Router" section):
 
 - https://create.t3.gg/en/usage/next-auth
+
+## Uploading
+
+We are leveraging [UploadThing](https://uploadthing.com/) for uploading and storing our ePub files. UploadThing is awesome and makes everything a lot easier.
+
+Note: I also realize that the name of `uploadthing` is `uploadthing` with all lower-case letters, but the logo with the two colours makes it much more readable. So I will be using camel-case (`UploadThing`) to denote it in this README. Please don't hate me!
+
+### UploadThing Setup
+
+1. Create an account at [UploadThing](https://uploadthing.com/)
+2. Setup a new application
+3. Add the required environment variables to `.env.local`
+
+### UploadThing Environment Variables
+
+```bash
+UPLOADTHING_TOKEN=...
+```
 
 ## Local Development
 
@@ -61,6 +90,7 @@ This will then be used as the base of the database when you spin up the containe
 
 ## TODOs
 
+MVP:
 - [x] Deployments via Coolify
 - [x] Containterize it for local development
 - [x] Health Endpoint
@@ -70,18 +100,22 @@ This will then be used as the base of the database when you spin up the containe
 - [x] Attach database to UI
 - [x] Add authentication
 - [x] Add Good Reads scraper
-- [ ] Add epub uploading (UploadThing)
-- [ ] Add emailing epub to Kindle
+- [x] Add epub uploading (UploadThing)
+- [ ] Add emailing epub to Kindle (Resend)
+
+Nice to Have:
+- [ ] Searching
+- [ ] Pagination
+- [ ] Ratings (from our users)
+- [ ] Reviews
 
 ## Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-### What's next? How do I make an app with this?
+### Learn More
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
 - [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
@@ -89,12 +123,7 @@ If you are not familiar with the different technologies used in this project, pl
 - [Drizzle](https://orm.drizzle.team)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
-
-### Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
 - [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — feedback and contributions are welcome!

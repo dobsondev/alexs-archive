@@ -7,6 +7,12 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
   output: "standalone",
+  images: {
+    domains: [
+      'images-na.ssl-images-amazon.com',
+      'images.gr-assets.com',
+    ]
+  }
 };
 
 export default config;

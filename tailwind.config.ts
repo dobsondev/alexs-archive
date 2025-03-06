@@ -1,8 +1,14 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import { withUt } from "uploadthing/tw";
 
-export default {
-  content: ["./src/**/*.tsx"],
+const flowbite = require("flowbite-react/tailwind");
+
+export default withUt({
+  content: [
+    "./src/**/*.tsx",
+    flowbite.content(),
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -10,5 +16,7 @@ export default {
       },
     },
   },
-  plugins: [],
-} satisfies Config;
+  plugins: [
+    flowbite.plugin(),
+  ],
+}) satisfies Config;

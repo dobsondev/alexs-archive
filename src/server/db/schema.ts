@@ -30,6 +30,7 @@ export const books = createTable(
     publishedDate: varchar("published_date", { length: 255 }).notNull(),
     imageUrl: varchar("image_url", { length: 255 }).notNull(),
     goodReadsUrl: varchar("good_reads_url", { length: 255 }).notNull(),
+    uploadthingUrl: varchar("uploadthing_url", { length: 255 }).notNull(),
     createdById: varchar("created_by", { length: 255 })
       .notNull()
       .references(() => users.id),

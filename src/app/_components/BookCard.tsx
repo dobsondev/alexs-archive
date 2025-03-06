@@ -35,7 +35,7 @@ export default function BookCard({ book }: { book: Book }) {
               </div>
             </div>
             <div className="gap-4">
-              <a className="block rounded-md border border-purple-600 text-slate-400 py-2 px-4 mt-2 text-sm text-center font-semibold hover:border-purple-400 hover:bg-purple-400 hover:text-slate-800" href="#">Download ePub</a>
+              <a className="block rounded-md border border-purple-600 text-slate-400 py-2 px-4 mt-2 text-sm text-center font-semibold hover:border-purple-400 hover:bg-purple-400 hover:text-slate-800" href={book.uploadthingUrl}>Download ePub</a>
               <a className="block rounded-md border border-orange-600 text-slate-400 py-2 px-4 mt-2 text-sm text-center font-semibold hover:border-orange-400 hover:bg-orange-400 hover:text-slate-800" href="#">Send to Kindle</a>
             </div>
           </div>

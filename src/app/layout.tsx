@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
-import TopBar from "~/_components/TopBar";
+import TopBar from "~/app/_components/TopBar";
 
 export const metadata: Metadata = {
   title: "Alexs Archive",
