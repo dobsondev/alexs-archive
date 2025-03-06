@@ -68,11 +68,10 @@ This will then be used as the base of the database when you spin up the containe
 - [x] Mock data
 - [x] UI with mock data
 - [x] Attach database to UI
-- [ ] Add authentication
-- [ ] Add book uploading
-- [ ] Error management
-- [ ] Add routing / book page (parallel route)
-- [ ] Delete button (w/ Server Actions)
+- [x] Add authentication
+- [x] Add Good Reads scraper
+- [ ] Add epub uploading (UploadThing)
+- [ ] Add emailing epub to Kindle
 
 ## Create T3 App
 

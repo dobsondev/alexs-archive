@@ -1,5 +1,6 @@
 import { auth } from '~/server/auth';
 import { redirect } from 'next/navigation';
+import SignInButton from '~/_components/SignInButton';
 
 export default async function HomePage() {
   const session = await auth();
@@ -14,6 +15,7 @@ export default async function HomePage() {
         <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
           Alexs Archive
         </h1>
+        <SignInButton />
       </div>
     </main>
   );
