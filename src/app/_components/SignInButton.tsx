@@ -4,6 +4,6 @@ import { signIn } from "next-auth/react"
 
 export default function SignInButton() {
   return (
-    <button className="w-28 rounded-md bg-purple-600 text-white py-2 px-4 font-semibold hover:bg-purple-400 hover:text-slate-800" onClick={() => signIn()}>Sign in</button>
+    <button className="w-32 px-4 py-2 text-white bg-purple-600 rounded-md hover:bg-purple-700" onClick={() => signIn()}>Sign in</button>
   );
 }

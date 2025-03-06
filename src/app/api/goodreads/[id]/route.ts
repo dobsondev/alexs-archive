@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { scrapeGoodreads } from '~/utils/scrapeGoodReads';
+import { scrapeGoodreads } from '~/app/_utils/scrapeGoodReads';
 
 export async function GET(
   request: NextRequest,

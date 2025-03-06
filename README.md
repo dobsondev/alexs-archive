@@ -54,6 +54,17 @@ Note: I also realize that the name of `uploadthing` is `uploadthing` with all lo
 UPLOADTHING_TOKEN=...
 ```
 
+## Emailing
+
+We are leveraging [Resend](https://resend.com/) for email sending. Emails are used to send the ePub files directly to your Kindle email for the easiest method of getting the books onto your Kindle.
+
+### Resend Setup
+
+1. Sign up for an account at [Resend](https://resend.com/)
+2. [Create an API key](https://resend.com/api-keys)
+3. [Add a domain](https://resend.com/domains)
+4. Setup DNS records for your domain to use Resend
+
 ## Local Development
 
 The best way to run the project locally is to use the `docker-compose.yml` file:
@@ -104,6 +115,8 @@ MVP:
 - [ ] Add emailing epub to Kindle (Resend)
 
 Nice to Have:
+- [ ] Uploading only to select users
+- [ ] Help page for how to setup Send-to-Kindle Emails and Approved Emails
 - [ ] Searching
 - [ ] Pagination
 - [ ] Ratings (from our users)

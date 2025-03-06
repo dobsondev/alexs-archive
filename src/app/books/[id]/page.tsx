@@ -25,11 +25,11 @@ export default async function BookPage({ params }: { params: { id: string } }) {
         breadcrumbs={[
           { 
             label: 'Books', 
-            href: '/dashboard' 
+            href: '/books' 
           },
           {
             label: book.title,
-            href: '/book/' + book.id,
+            href: '/books/' + book.id,
             active: true,
           },
         ]}

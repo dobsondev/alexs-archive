@@ -1,7 +1,7 @@
 import { auth } from '~/server/auth';
 import { redirect } from 'next/navigation';
 
-export default async function DashboardLayout({
+export default async function BookLayout({
   children,
 }: {
   children: React.ReactNode;

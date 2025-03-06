@@ -2,7 +2,7 @@
 
 import { useRouter, redirect } from 'next/navigation';
 import Breadcrumbs from "~/app/_components/Breadcrumbs";
-import { UploadButton } from "~/utils/uploadthing";
+import { UploadButton } from "~/app/_utils/uploadthing";
 
 export default function UploadBookPage() {
   const router = useRouter();
@@ -13,11 +13,11 @@ export default function UploadBookPage() {
         breadcrumbs={[
           { 
             label: 'Books', 
-            href: '/dashboard' 
+            href: '/books' 
           },
           {
             label: 'Upload Book',
-            href: '/book/upload',
+            href: '/books/upload',
             active: true,
           },
         ]}

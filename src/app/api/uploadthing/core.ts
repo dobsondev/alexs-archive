@@ -1,7 +1,7 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { auth } from "~/server/auth";
-import { scrapeGoodreads } from '~/utils/scrapeGoodReads';
+import { scrapeGoodreads } from '~/app/_utils/scrapeGoodReads';
 import { db } from "~/server/db";
 import { books } from "~/server/db/schema";
 

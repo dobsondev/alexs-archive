@@ -10,7 +10,7 @@ export default function TopBar() {
   if (session && session.user) {
     return (
       <header className="flex w-full justify-end border-b-2 border-slate-800 gap-8 p-4">
-        <Link href="/book/upload" className="border-r-2 border-slate-800 pr-8">Upload Book</Link>
+        <Link href="/books/upload" className="border-r-2 border-slate-800 pr-8">Upload Book</Link>
 
         <Dropdown label="" dismissOnClick={false} renderTrigger={() => (
             <div>
@@ -23,7 +23,9 @@ export default function TopBar() {
               <div className="font-medium truncate">{session.user.email}</div>
             </div>
           </Dropdown.Item>
-          <Dropdown.Item>Kindle Email</Dropdown.Item>
+          <Dropdown.Item>
+            <Link href="/user/profile">Profile Settings</Link>
+          </Dropdown.Item>
           <Dropdown.Item>
             <a href="#" onClick={(e) => { e.preventDefault(); signOut();}} className="block w-full text-left">
               Sign out
