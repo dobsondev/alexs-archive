@@ -10,7 +10,7 @@ on:
 
 jobs:
   check-secrets:
-    name: Checking for Secrets
+    name: Check for Secrets
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -19,13 +19,14 @@ jobs:
         uses: secret-scanner/action@0.0.2
 
   build:
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Install Dependencies
-        run: npm install -g pnpm && pnpm install
+        run: npm install
 
       - name: Copy .env.example files
         shell: bash
