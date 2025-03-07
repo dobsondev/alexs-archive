@@ -1,4 +1,4 @@
-import { Book } from '~/app/lib/definitions';
+import { Book } from '~/app/_lib/definitions';
 
 const mockBooks: Array<Book> = [
   {
