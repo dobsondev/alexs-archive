@@ -2,108 +2,22 @@
 
 This application is a storage solution for my own eBook files.
 
-## Authentication
+## Services
 
-This app leverages [Auth0](https://auth0.com/) which has a generous free tier for Authentication. Also note that we are using the v5 beta of NextAuth.js - which is now known simply as Auth.js. You can find the Auth.js documentation here:
+I have leveraged the following services for this application:
 
-- https://authjs.dev/getting-started
+1. [Netlify](https://www.netlify.com/) (Free Tier) for deployments
+2. [Neon](https://neon.tech/) (Free Tier) for production database hosting
+3. [Auth0](https://auth0.com/) (Free Tier) for authentication
+4. [uploadthing](https://uploadthing.com/) (Free Tier) for file uploads
+5. [Resend](https://resend.com/) (Free Tier) for emailing
 
-### Authentication Setup
 
-1. Sign up for an account at [Auth0](https://auth0.com/)
-2. Create your application
-3. Add `http://localhost:3000/api/auth/callback` and `http://localhost:3000/` to your "Callback URLs"
-4. Add `http://localhost:3000/` to your "Logout URLs"
-5. Add required environment variables to `.env.local`
-6. Configure any users in Auth0 that you need, and then login
+The application is built to use [Auth0](https://auth0.com/), [uploadthing](https://uploadthing.com/), and [Resend](https://resend.com/). You can easily use any deployment service and database provider that you wish though as there is no built in logic/code for those aspects of the application. If you are planning to setup this application yourself, you can refer to the following documentation for more detailed setup instructions on these three services:
 
-### Authentication Environment Variables
-
-```bash
-AUTH_SECRET=...
-AUTH0_CLIENT_ID=...
-AUTH0_CLIENT_SECRET=...
-AUTH0_ISSUER=...
-```
-
-### More Authentication Documentation
-
-Auth0 documentation can be found here:
-
-- https://auth0.com/docs
-
-T3 Stack documentation regarding Authentication can be found here (remember to look under the "App Router" section):
-
-- https://create.t3.gg/en/usage/next-auth
-
-## Uploading
-
-We are leveraging [UploadThing](https://uploadthing.com/) for uploading and storing our ePub files. UploadThing is awesome and makes everything a lot easier.
-
-Note: I also realize that the name of `uploadthing` is `uploadthing` with all lower-case letters, but the logo with the two colours makes it much more readable. So I will be using camel-case (`UploadThing`) to denote it in this README. Please don't hate me!
-
-### UploadThing Setup
-
-1. Create an account at [UploadThing](https://uploadthing.com/)
-2. Setup a new application
-3. Add the required environment variables to `.env.local`
-
-### UploadThing Environment Variables
-
-```bash
-UPLOADTHING_TOKEN=...
-```
-
-## Emailing
-
-We are leveraging [Resend](https://resend.com/) for email sending. Emails are used to send the ePub files directly to your Kindle email for the easiest method of getting the books onto your Kindle.
-
-### Resend Setup
-
-1. Sign up for an account at [Resend](https://resend.com/)
-2. [Create an API key](https://resend.com/api-keys)
-3. [Add a domain](https://resend.com/domains)
-4. Setup DNS records for your domain to use Resend
-
-### Resend Environment Variables
-
-```bash
-RESEND_API_KEY=...
-```
-
-## Local Development
-
-The best way to run the project locally is to use the `docker-compose.yml` file:
-
-```bash
-docker compose up -d
-```
-
-This will create a Postgres database for you to use on your local, and will spin up your Next.js application on port 3000 using `npm run dev`.
-
-Alternatively, you can of course just run `npm run dev` directly on your machine.
-
-If you want to have a UI into the database, you can use Drizzle Studio by running:
-
-```bash
-npm run db:studio
-```
-
-### Postgres database
-
-Please note that the Postgres database created by the `docker-compose.yml` file uses a volume to mount it's data so that it is not lost between different runs of the `docker-compose.yml` file. To completely remove this volume and start the database from fresh, use the following command to delete volumes:
-
-```bash
-docker compose down -v
-```
-
-To create a database dump which can be picked up by Docker automatically, use the following command:
-
-```bash
-docker exec -t alexs-archive-db-1 pg_dump -U postgres postgres > docker/initdb/init.sql
-```
-
-This will then be used as the base of the database when you spin up the containers using `docker compose up`.
+- [Authentication with Auth0](./docs/authentication.md)
+- [Emailing with Resend](./docs/emailing.md)
+- [Uploading with uploadthing](./docs/uploading.md)
 
 ## TODOs
 
@@ -122,15 +36,82 @@ MVP:
 
 Nice to Have:
 - [x] Uploading only to select users
+- [ ] Admin users
+- [ ] Admin user interface to give users ability to upload
 - [ ] Help page for how to setup Send-to-Kindle Emails and Approved Emails
+- [ ] Automatic Drizzle migrations via GitHub CI
 - [ ] Searching
 - [ ] Pagination
 - [ ] Ratings (from our users)
 - [ ] Reviews
 
+## Local Development
+
+Note: you will need to setup your `.env` on your local before running `docker-compose up -d` or `npm run dev`.
+
+The best way to run the project locally is to use the `docker-compose.yml` file:
+
+```bash
+docker compose up -d
+```
+
+This will create a local Postgres database for you to use, and will spin up your Next.js application on port 3000 using `npm run dev`. I like using a local Postgres database so I can mess it up as much as I want before actually working on the real database.
+
+Alternatively, you can of course just run `npm run dev` directly on your machine.
+
+If you want to have a UI into the database, you can use Drizzle Studio by running:
+
+```bash
+npm run db:studio
+```
+
+### Drizzle
+
+When running any Drille Kit commands such as `npm run db:studio` or `npm run db:push`, the command will connect to whatever database is defined in your `.env` file with the key `DATABASE_URL`. This means you can switch this out between your local Postgres database from Docker and the actual production database if you need to make changes.
+
+The local database URL setup for the `.env` will be:
+
+```bash
+DATABASE_URL=postgresql://postgres:devpass@localhost:5432/postgres
+```
+
+The actual production one should be kept secret and will depend on what service you choose to use to host your database.
+
+#### Drizzle Documentation
+
+- https://orm.drizzle.team/docs/overview
+
+### Docker Postgres Database
+
+Please note that the Postgres database created by the `docker-compose.yml` file uses a volume to mount it's data so that it is not lost between different runs of the `docker-compose.yml` file. To completely remove this volume and start the database from fresh, use the following command to delete volumes:
+
+```bash
+docker compose down -v
+```
+
+To create a database dump which can be picked up by Docker automatically, use the following command:
+
+```bash
+docker exec -t alexs-archive-db-1 pg_dump -U postgres postgres > docker/initdb/init.sql
+```
+
+This will then be used as the base of the database when you spin up the containers using `docker compose up`.
+
 ## Create T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This is a proud [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`. The [T3 Stack](https://create.t3.gg/) is awesome and I highly recommend you check it out and consider using it for your fullstack development needs.
+
+## Deploying
+
+The only real note on deploying this application is that you may need to add in the following environment variable to your deployment platform of choice depending on if they use a reverse proxy or not:
+
+```bash
+AUTH_TRUST_HOST=true
+```
+
+> When deploying your application behind a reverse proxy, you’ll need to set `AUTH_TRUST_HOST` equal to `true`. This tells Auth.js to trust the `X-Forwarded-Host` header from the reverse proxy. Auth.js will automatically infer this to be true if we detect the environment variable indicating that your application is running on one of the supported hosting providers.
+
+Other than that, deploying the application will mostly depend on which platform you choose to use to deploy.
 
 ### Learn More
 
