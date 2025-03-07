@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Breadcrumbs from "~/app/_components/Breadcrumbs";
 import { UploadButton } from "~/app/_utils/uploadthing";
 
-export default async function UploadBookPage() {
+export default function UploadBookPage() {
   const router = useRouter();
 
   return (
@@ -67,7 +67,7 @@ export default async function UploadBookPage() {
             <li>Look at the URL, which will be in the format: https://www.goodreads.com/book/show/[ID]-[title]</li>
           </ol>
           <p className="mb-4">
-            For example, we want to use the filename <b>61431922-fourth-wing.epub</b> for "Fourth Wing" which can be found here:
+            For example, we want to use the filename <b>61431922-fourth-wing.epub</b> for &quot;Fourth Wing&quot; which can be found here:
           </p>
           <p className="py-2">
             &bull; <a className="text-blue-500" href="https://www.goodreads.com/book/show/61431922-fourth-wing" target="_blank">https://www.goodreads.com/book/show/61431922-fourth-wing</a>

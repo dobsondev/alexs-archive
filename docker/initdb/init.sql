@@ -102,7 +102,8 @@ CREATE TABLE public."alexs-archive_book" (
     good_reads_url character varying(255) NOT NULL,
     created_by character varying(255) NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp with time zone
+    updated_at timestamp with time zone,
+    uploadthing_url character varying(255) NOT NULL
 );
 
 
@@ -144,7 +145,9 @@ CREATE TABLE public."alexs-archive_user" (
     name character varying(255),
     email character varying(255) NOT NULL,
     email_verified timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-    image character varying(255)
+    image character varying(255),
+    kindle_email character varying(255),
+    upload_permission boolean DEFAULT false NOT NULL
 );
 
 
@@ -191,9 +194,7 @@ COPY public."alexs-archive_account" (user_id, type, provider, provider_account_i
 -- Data for Name: alexs-archive_book; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."alexs-archive_book" (id, title, series, series_num, author, page_count, published_date, image_url, good_reads_url, created_by, created_at, updated_at) FROM stdin;
-1	A Court of Thorns and Roses	\N	\N	Sarah J. Maas	419	June 2, 2020	https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1620324329i/50659467.jpg	https://www.goodreads.com/book/show/50659467-a-court-of-thorns-and-roses	1	2025-03-05 20:59:53.443877+00	\N
-2	Fourth Wing	The Empyrean	3	Rebecca Yarros	517	May 2, 2023	https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1701980900i/61431922.jpg	https://www.goodreads.com/book/show/61431922-fourth-wing	1	2025-03-05 21:02:33.818995+00	\N
+COPY public."alexs-archive_book" (id, title, series, series_num, author, page_count, published_date, image_url, good_reads_url, created_by, created_at, updated_at, uploadthing_url) FROM stdin;
 \.
 
 
@@ -209,8 +210,8 @@ COPY public."alexs-archive_session" (session_token, user_id, expires) FROM stdin
 -- Data for Name: alexs-archive_user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."alexs-archive_user" (id, name, email, email_verified, image) FROM stdin;
-1	Admin	admin@alexs-archive.org	2025-03-05 20:58:07.198471+00	\N
+COPY public."alexs-archive_user" (id, name, email, email_verified, image, kindle_email, upload_permission) FROM stdin;
+1	Admin	admin@alexs-archive.org	2025-03-05 20:58:07.198471+00	\N	\N	f
 \.
 
 

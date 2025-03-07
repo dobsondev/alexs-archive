@@ -1,5 +1,5 @@
 import { db } from '~/server/db';
-import { books } from '~/server/db/schema';
+import { type books } from '~/server/db/schema';
 import Breadcrumbs from "~/app/_components/Breadcrumbs";
 import BookCard from "~/app/_components/BookCard";
 
