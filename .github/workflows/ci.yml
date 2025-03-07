@@ -1,0 +1,38 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-secrets:
+    name: Checking for Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Secret Scanner
+        uses: secret-scanner/action@0.0.2
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install -g pnpm && pnpm install
+
+      - name: Copy .env.example files
+        shell: bash
+        run: find . -type f -name ".env.example" -exec sh -c 'cp "$1" "${1%.*}"' _ {} \;
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint

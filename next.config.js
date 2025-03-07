@@ -12,6 +12,13 @@ const config = {
       'images-na.ssl-images-amazon.com',
       'images.gr-assets.com',
     ]
+  },
+  // This will be handled by GitHub CI
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
   }
 };
 
