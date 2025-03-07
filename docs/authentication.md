@@ -29,9 +29,31 @@ You may need to add in the `AUTH_TRUST_HOST` environment variable to your deploy
 
 > When deploying your application behind a reverse proxy, you’ll need to set `AUTH_TRUST_HOST` equal to `true`. This tells Auth.js to trust the `X-Forwarded-Host` header from the reverse proxy. Auth.js will automatically infer this to be true if we detect the environment variable indicating that your application is running on one of the supported hosting providers.
 
+### Netlify Preview URLs
+
+If you want to allow Netlify preview URLs to work with your authentication, then you will want to add some wildcard domains to your "Callback URLs" and "Logout URLs" settings of your Auth0 application.
+
+"Callback URLs":
+
+```
+http://localhost:3000/api/auth/callback/auth0, 
+http://localhost:3000/api/auth/callback,
+https://*-<NETLIFY_PROJECT>.netlify.app/api/auth/callback/auth0,
+https://*-<NETLIFY_PROJECT>.netlify.app/api/auth/callback
+```
+
+"Logout URLs":
+
+```
+http://localhost:3000, 
+https://*-<NETLIFY_PROJECT>.netlify.app
+```
+
+Where `<NETLIFY_PROJECT>` would be replaced with your actual project slug. You will see what this part of the URL is when you deploy on Netlify.
+
 ### More Authentication Documentation
 
-Auth.js doucmentation on deployments:
+Auth.js documentation on deployments:
 
 - https://authjs.dev/getting-started/deployment
 
