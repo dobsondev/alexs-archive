@@ -10,7 +10,7 @@ export default function ProfileSettingsPage() {
     name: string | null;
     email: string;
     kindleEmail: string | null;
-  } | null>(null);
+  } | null | undefined>(null);
   
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,12 +18,21 @@ export default function ProfileSettingsPage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const data = await getUserProfile();
-      setProfile(data);
-      setIsLoading(false);
+      try {
+        const data = await getUserProfile();
+        setProfile(data);
+      } catch (error) {
+        // Handle error appropriately
+        console.error("Failed to fetch profile:", error);
+        // Maybe set an error state
+      } finally {
+        setIsLoading(false);
+      }
     };
     
-    fetchProfile();
+    fetchProfile().catch(error => {
+      console.error("Error in fetchProfile:", error);
+    });
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -78,11 +87,13 @@ export default function ProfileSettingsPage() {
             type="email"
             id="email"
             name="email"
-            value={profile?.email || ''}
+            value={profile?.email ?? ''}
             readOnly
             className="w-full p-2 bg-slate-900 text-slate-500 border border-slate-600 rounded-md"
           />
-          <p className="mt-1 text-sm text-slate-400">This is your account email and cannot be changed</p>
+          <p className="mt-1 text-sm text-slate-400">
+            This is your account email and cannot be changed
+          </p>
         </div>
         
         <div>
@@ -93,7 +104,7 @@ export default function ProfileSettingsPage() {
             type="email"
             id="kindleEmail"
             name="kindleEmail"
-            defaultValue={profile?.kindleEmail || ''}
+            defaultValue={profile?.kindleEmail ?? ''}
             placeholder="your-kindle@kindle.com"
             className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
           />
@@ -101,9 +112,12 @@ export default function ProfileSettingsPage() {
             This email is used to send books directly to your Kindle device. 
             You can find your Kindle email in your Amazon account settings.
           </p>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-slate-400">
             In order for automatic sending to work, you will need to add <b><u>kindle@alexs-archive.org</u></b> as one of your approved emails on your account. 
-            For more information, please see this link: <a className="hover:underline" href="https://www.amazon.ca/sendtokindle/email" target="_blank">https://www.amazon.ca/sendtokindle/email</a>.
+            For more information, please see this link:
+          </p>
+          <p className="mt-2 text-sm text-slate-400">
+            &bull; <a className="hover:underline" href="https://www.amazon.ca/sendtokindle/email" target="_blank">https://www.amazon.ca/sendtokindle/email</a>
           </p>
         </div>
         

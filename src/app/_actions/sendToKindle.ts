@@ -3,7 +3,6 @@
 import { sendBook } from '~/app/_utils/resend';
 import { db } from '~/server/db';
 import { auth } from '~/server/auth';
-import { redirect } from 'next/navigation';
 import { users } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 

@@ -11,6 +11,8 @@ const config = {
     domains: [
       'images-na.ssl-images-amazon.com',
       'images.gr-assets.com',
+      'www.gravatar.com',
+      's.gravatar.com',
     ]
   },
   // This will be handled by GitHub CI

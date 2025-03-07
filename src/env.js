@@ -37,11 +37,11 @@ export const env = createEnv({
    */
   runtimeEnv: {
     AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH0_CLIENT_ID: process.env.AUTH_DISCORD_ID,
-    AUTH0_CLIENT_SECRET: process.env.AUTH_DISCORD_SECRET,
-    AUTH0_ISSUER: process.env.AUTH_ISSUER,
+    AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
+    AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
+    AUTH0_ISSUER: process.env.AUTH0_ISSUER,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
-    RESEND_API_KEY: process.env.RESEND,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
   },

@@ -23,7 +23,7 @@ export async function updateKindleEmail(formData: FormData) {
     });
     
     await db.update(users)
-      .set({ kindleEmail: parsed.kindleEmail || null })
+      .set({ kindleEmail: parsed.kindleEmail ?? null })
       .where(eq(users.email, session.user.email));
     
     return { 

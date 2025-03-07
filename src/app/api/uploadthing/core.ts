@@ -1,5 +1,4 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
 import { auth } from "~/server/auth";
 import { scrapeGoodreads } from '~/app/_utils/scrapeGoodReads';
 import { db } from "~/server/db";
@@ -21,19 +20,19 @@ export const ourFileRouter = {
     },
   })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req, files }) => {
+    .middleware(async ({ files }) => {
       // This code runs on your server before upload
       const session = await auth();
 
       // If you throw, the user will not be able to upload
-      if (!session || !session.user) throw new UploadThingError("Unauthorized");
-      if (!files || !files[0]) throw new UploadThingError("No file uploaded");
+      if (!session || !session.user) throw new Error("Unauthorized");
+      if (!files?.[0]) throw new Error("No file uploaded");
 
       let bookData = null;
-      let goodreadsId = files[0].name.split(".epub")[0];
+      const goodreadsId = files[0].name.split(".epub")[0];
 
       if (!goodreadsId) {
-        throw new UploadThingError("Invalid file name");
+        throw new Error("Invalid file name");
       }
       bookData = await scrapeGoodreads(goodreadsId);
 
@@ -47,11 +46,11 @@ export const ourFileRouter = {
       // This code RUNS ON YOUR SERVER after upload
       const result = await db.insert(books).values({
         title: metadata.bookData.title,
-        series: metadata.bookData.series || null,
+        series: metadata.bookData.series ?? null,
         seriesNum: metadata.bookData.seriesNum ? Math.floor(metadata.bookData.seriesNum) : null,
         author: metadata.bookData.author,
-        pageCount: metadata.bookData.pageCount || 0,
-        publishedDate: metadata.bookData.publishedDate || 'Unknown',
+        pageCount: metadata.bookData.pageCount ?? 0,
+        publishedDate: metadata.bookData.publishedDate ?? 'Unknown',
         imageUrl: metadata.bookData.imageUrl,
         goodReadsUrl: metadata.bookData.goodReadsUrl,
         uploadthingUrl: file.ufsUrl,

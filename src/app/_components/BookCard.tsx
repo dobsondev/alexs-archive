@@ -1,6 +1,6 @@
 'use client';
 
-import { books } from '~/server/db/schema';
+import { type books } from '~/server/db/schema';
 import { ArrowUpRightIcon } from "@heroicons/react/16/solid";
 import { sendToKindle } from '~/app/_actions/sendToKindle';
 import { useState } from 'react';
@@ -29,7 +29,7 @@ export default function BookCard({ book }: { book: Book }) {
     } catch (error) {
       setMessage({ 
         text: 'An unexpected error occurred. Please try again.', 
-        type: 'error' 
+        type: 'error'
       });
     } finally {
       setIsSending(false);

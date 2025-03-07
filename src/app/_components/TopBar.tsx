@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react"
 import Link from "next/link";
+import Image from 'next/image';
 import { Dropdown } from "flowbite-react";
 
 export default function TopBar() {
@@ -19,7 +20,13 @@ export default function TopBar() {
         <Dropdown label="" dismissOnClick={false} renderTrigger={() => (
             <div>
               <span className="sr-only">Open user menu</span>
-              <img className="w-6 h-6 rounded-full" src={session.user.image ?? "https://www.gravatar.com/avatar/?d=identicon"} alt="user photo" />
+              <Image 
+                className="w-6 h-6 rounded-full" 
+                src={session.user.image ?? "https://www.gravatar.com/avatar/?d=identicon"} 
+                alt="user photo"
+                width={24}
+                height={24}
+              />
             </div>
           )}>
           <Dropdown.Item>
@@ -31,7 +38,7 @@ export default function TopBar() {
             <Link href="/user/profile">Profile Settings</Link>
           </Dropdown.Item>
           <Dropdown.Item>
-            <a href="#" onClick={(e) => { e.preventDefault(); signOut();}} className="block w-full text-left">
+            <a href="#" onClick={(e) => { e.preventDefault(); void signOut();}} className="block w-full text-left">
               Sign out
             </a>
           </Dropdown.Item>
