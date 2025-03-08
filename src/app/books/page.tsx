@@ -22,7 +22,7 @@ export default async function bookDashboard() {
         ]}
       /
       >
-      <main className="p-8 grid grid-cols-3 gap-6">
+      <main className="p-8 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
         {books.map((book: Book) => {
           return (
             <BookCard key={book.id} book={book} />
