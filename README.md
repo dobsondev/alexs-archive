@@ -34,6 +34,11 @@ MVP:
 - [x] Add epub uploading (UploadThing)
 - [x] Add emailing epub to Kindle (Resend)
 
+Chores:
+- [ ] Consistent styling pass over code
+- [ ] Button components
+- [ ] Check over AI code
+
 Nice to Have:
 - [x] Uploading only to select users
 - [ ] Admin users
@@ -97,10 +102,6 @@ docker exec -t alexs-archive-db-1 pg_dump -U postgres postgres > docker/initdb/i
 
 This will then be used as the base of the database when you spin up the containers using `docker compose up`.
 
-## Create T3 App
-
-This is a proud [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`. The [T3 Stack](https://create.t3.gg/) is awesome and I highly recommend you check it out and consider using it for your fullstack development needs.
-
 ## Deploying
 
 The only real note on deploying this application is that you may need to add in the following environment variable to your deployment platform of choice depending on if they use a reverse proxy or not:
@@ -112,6 +113,11 @@ AUTH_TRUST_HOST=true
 > When deploying your application behind a reverse proxy, you’ll need to set `AUTH_TRUST_HOST` equal to `true`. This tells Auth.js to trust the `X-Forwarded-Host` header from the reverse proxy. Auth.js will automatically infer this to be true if we detect the environment variable indicating that your application is running on one of the supported hosting providers.
 
 Other than that, deploying the application will mostly depend on which platform you choose to use to deploy.
+
+## Create T3 App
+
+This is a proud [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`. The [T3 Stack](https://create.t3.gg/) is awesome and I highly recommend you check it out and consider using it for your fullstack development needs.
+
 
 ### Learn More
 
