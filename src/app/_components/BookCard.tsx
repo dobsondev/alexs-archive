@@ -38,7 +38,7 @@ export default function BookCard({ book }: { book: Book }) {
 
   if (book.id) {
     return (
-      <div className="book-card border border-slate-800 rounded-md p-4 grid grid-cols-2 gap-6">
+      <div className="book-card border border-slate-800 rounded-md p-4 grid sm:grid-cols-2 gap-6">
         <div className="col-span-1">
           <img src={book.imageUrl} alt="{book.title} Cover" className="rounded-md w-full h-auto" />
         </div>
