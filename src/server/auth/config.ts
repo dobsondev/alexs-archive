@@ -40,7 +40,16 @@ export const authConfig = {
         params: {
           scope: "openid email profile",
         }
-      }
+      },
+      profile(profile) {
+        return {
+          id: profile.sub, // Unique ID from Auth0
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          uploadPermission: false
+        };
+      },
     })
   ],
   adapter: DrizzleAdapter(db, {
