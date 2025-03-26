@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from 'next/image';
 import { Dropdown } from "flowbite-react";
 
+export const dynamic = 'force-dynamic';
+
 export default function TopBar() {
   const { data: session } = useSession()
 
