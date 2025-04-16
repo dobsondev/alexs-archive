@@ -2,6 +2,8 @@ import { auth } from '~/server/auth';
 import { redirect } from 'next/navigation';
 import TopBar from "~/app/_components/TopBar";
 
+export const dynamic = 'force-dynamic';
+
 export default async function BookLayout({
   children,
 }: {
