@@ -24,10 +24,11 @@ export default function TopBar() {
               <span className="sr-only">Open user menu</span>
               <Image 
                 className="w-6 h-6 rounded-full" 
-                src={session.user.image ?? "https://www.gravatar.com/avatar/?d=identicon"} 
+                src={`${session.user.image ?? "https://www.gravatar.com/avatar/?d=identicon"}&t=${encodeURIComponent(session.user.email ?? '')}`} 
                 alt="user photo"
                 width={24}
                 height={24}
+                unoptimized
               />
             </div>
           )}>
