@@ -4,12 +4,16 @@ import { type books } from '~/server/db/schema';
 import { ArrowUpRightIcon } from "@heroicons/react/16/solid";
 import { sendToKindle } from '~/app/_actions/sendToKindle';
 import { useState } from 'react';
+import { useKindleEmail } from '~/app/_contexts/KindleEmailContext';
+import KindleConfirmationModal from './KindleConfirmationModal';
 
 type Book = typeof books.$inferSelect;
 
 export default function BookCard({ book }: { book: Book }) {
   const [isSending, setIsSending] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const { selectedKindleEmail } = useKindleEmail();
 
   const handleSendToKindle = async () => {
     setIsSending(true);
@@ -17,23 +21,30 @@ export default function BookCard({ book }: { book: Book }) {
     
     try {
       const result = await sendToKindle(
-        book.title || '', 
-        book.uploadthingUrl || ''
+        book.title ?? '', 
+        book.uploadthingUrl ?? '',
+        selectedKindleEmail?.kindleEmail
       );
       
-      if (result.success) {
-        setMessage({ text: result.message, type: 'success' });
-      } else {
-        setMessage({ text: result.message, type: 'error' });
-      }
-    } catch (error) {
+      setMessage({ 
+        text: result.message, 
+        type: result.success ? 'success' : 'error' 
+      });
+      setShowModal(true);
+    } catch {
       setMessage({ 
         text: 'An unexpected error occurred. Please try again.', 
         type: 'error'
       });
+      setShowModal(true);
     } finally {
       setIsSending(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setMessage(null);
   };
 
   if (book.id) {
@@ -78,6 +89,16 @@ export default function BookCard({ book }: { book: Book }) {
             </div>
           </div>
         </div>
+
+        {/* Confirmation Modal */}
+        {message && (
+          <KindleConfirmationModal
+            isOpen={showModal}
+            message={message.text}
+            type={message.type}
+            onClose={handleCloseModal}
+          />
+        )}
       </div>
 
     );
