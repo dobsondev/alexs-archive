@@ -1,0 +1,38 @@
+services:
+  # This service used when using a local database based in Docker. This can be run via:
+  # `docker compose --profile local up`
+  next-js:
+    image: node:22-alpine
+    command: npm run dev --turbo
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./node_modules:/app/node_modules
+    environment:
+      # We use `db` here for Docker DNS
+      - DATABASE_URL=postgresql://postgres:devpass@db:5432/postgres
+    depends_on:
+      - db
+
+  # Use `npm run db:studio` to run Drizzle studio if you need a UI for the database,
+  # you will be able to access it at https://local.drizzle.studio/.
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: postgres
+    volumes:
+      - ./docker/initdb:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  node_modules:
+  db_data: # Used for persistent database data between docker runs

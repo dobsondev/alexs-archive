@@ -7,11 +7,10 @@ This application is a storage solution for my own eBook files.
 I have leveraged the following services for this application:
 
 1. [Netlify](https://www.netlify.com/) (Free Tier) for deployments
-2. [Neon](https://neon.tech/) (Free Tier) for production database hosting
+2. [Neon](https://neon.tech/) (Free Tier) for database hosting
 3. [Auth0](https://auth0.com/) (Free Tier) for authentication
 4. [uploadthing](https://uploadthing.com/) (Free Tier) for file uploads
 5. [Resend](https://resend.com/) (Free Tier) for emailing
-
 
 The application is built to use [Auth0](https://auth0.com/), [uploadthing](https://uploadthing.com/), and [Resend](https://resend.com/). You can easily use any deployment service and database provider that you wish though as there is no built in logic/code for those aspects of the application. If you are planning to setup this application yourself, you can refer to the following documentation for more detailed setup instructions on these three services:
 
@@ -41,14 +40,15 @@ Chores:
 
 Nice to Have:
 - [x] Uploading only to select users
-- [ ] Admin users
+- [x] Admin users
 - [ ] Admin user interface to give users ability to upload
-- [ ] Help page for how to setup Send-to-Kindle Emails and Approved Emails
+- [x] Help page for how to setup Send-to-Kindle Emails and Approved Emails
 - [ ] Automatic Drizzle migrations via GitHub CI
-- [ ] Searching
+- [x] Searching
 - [ ] Pagination
 - [ ] Ratings (from our users)
 - [ ] Reviews
+- [ ] Admin user ability to send emails to any user's Kindle email
 
 ## Local Development
 
@@ -58,6 +58,15 @@ The best way to run the project locally is to use the `docker-compose.yml` file:
 
 ```bash
 docker compose up -d
+```
+
+This will connect to the database defined in your `.env` file with the key `DATABASE_URL`. Ideally, this should be a remote Neon database that is a branch of your main database for development purposes. See Neon's documentation on branching for more information:
+- https://neon.com/docs/introduction/branching
+
+You can also run a local Postgres database by running:
+
+```bash
+docker compose -f docker-compose.local-db.yml up -d
 ```
 
 This will create a local Postgres database for you to use, and will spin up your Next.js application on port 3000 using `npm run dev`. I like using a local Postgres database so I can mess it up as much as I want before actually working on the real database.
@@ -74,6 +83,11 @@ npm run db:studio
 
 When running any Drille Kit commands such as `npm run db:studio` or `npm run db:push`, the command will connect to whatever database is defined in your `.env` file with the key `DATABASE_URL`. This means you can switch this out between your local Postgres database from Docker and the actual production database if you need to make changes.
 
+You can get your development database URL from Neon and put it in the `.env` file. Ideally, this should be a branch of your main database. This is especially useful since you can update the branch from the main database to get an up-to-date version of the application in terms of what books are stored on it.
+
+See Neon's documentation on branching for more information:
+- https://neon.com/docs/introduction/branching
+
 The local database URL setup for the `.env` will be:
 
 ```bash
@@ -88,10 +102,10 @@ The actual production one should be kept secret and will depend on what service 
 
 ### Docker Postgres Database
 
-Please note that the Postgres database created by the `docker-compose.yml` file uses a volume to mount it's data so that it is not lost between different runs of the `docker-compose.yml` file. To completely remove this volume and start the database from fresh, use the following command to delete volumes:
+Please note that the Postgres database created by the `docker-compose.local-db.yml` file uses a volume to mount it's data so that it is not lost between different runs of the `docker-compose.local-db.yml` file. To completely remove this volume and start the database from fresh, use the following command to delete volumes:
 
 ```bash
-docker compose down -v
+docker compose -f docker-compose.local-db.yml down -v
 ```
 
 To create a database dump which can be picked up by Docker automatically, use the following command:
@@ -100,7 +114,8 @@ To create a database dump which can be picked up by Docker automatically, use th
 docker exec -t alexs-archive-db-1 pg_dump -U postgres postgres > docker/initdb/init.sql
 ```
 
-This will then be used as the base of the database when you spin up the containers using `docker compose up`.
+This will then be used as the base of the database when you spin up the containers using
+`docker compose -f docker-compose.local-db.yml up`.
 
 ## Deploying
 
