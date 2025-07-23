@@ -20,13 +20,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Database Management
 - `npm run db:generate` - Generate Drizzle migrations
-- `npm run db:migrate` - Run Drizzle migrations  
+- `npm run db:migrate` - Run Drizzle migrations
 - `npm run db:push` - Push schema changes to database
 - `npm run db:studio` - Open Drizzle Studio database UI
 
 ### Docker Development
-- `docker compose up -d` - Start local development environment with Postgres database
-- `docker compose down -v` - Stop containers and remove volumes
+- `docker compose up -d` - Start local development environment with remote Neon development Postgres database
+- `docker compose -f docker-compose.local.yml up -d` - Start local development environment with local Docker Postgres database
+- `docker compose [-f docker-compose.local.yml] down -v` - Stop containers and remove volumes
 - Local database URL: `postgresql://postgres:devpass@localhost:5432/postgres`
 
 ## Architecture Overview
@@ -68,7 +69,7 @@ This is a Next.js 15 eBook storage application built with the T3 Stack, featurin
 
 ### Key Integrations
 - **Goodreads Scraping**: Automatic metadata extraction using book IDs
-- **UploadThing**: Secure file uploads with middleware validation  
+- **UploadThing**: Secure file uploads with middleware validation
 - **Auth0**: OAuth authentication with custom profile mapping
 - **Resend**: Email service for Kindle delivery
 
