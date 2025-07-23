@@ -4,6 +4,7 @@ import { useSession, signOut } from "next-auth/react"
 import Link from "next/link";
 import Image from 'next/image';
 import { Dropdown } from "flowbite-react";
+import KindleEmailSelector from './KindleEmailSelector';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,9 +15,12 @@ export default function TopBar() {
     return (
       <header className="flex w-full justify-end border-b-2 border-slate-800 gap-8 p-4">
         {session.user.uploadPermission && (
-          <Link href="/books/upload" className="border-r-2 border-slate-800 pr-8">
-            Upload Book
-          </Link>
+          <>
+            <KindleEmailSelector />
+            <Link href="/books/upload" className="border-r-2 border-slate-800 pr-8">
+              Upload Book
+            </Link>
+          </>
         )}
 
         <Dropdown label="" dismissOnClick={false} renderTrigger={() => (

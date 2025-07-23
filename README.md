@@ -33,11 +33,6 @@ MVP:
 - [x] Add epub uploading (UploadThing)
 - [x] Add emailing epub to Kindle (Resend)
 
-Chores:
-- [ ] Consistent styling pass over code
-- [ ] Button components
-- [ ] Check over AI code
-
 Nice to Have:
 - [x] Uploading only to select users
 - [x] Admin users
@@ -48,7 +43,7 @@ Nice to Have:
 - [ ] Pagination
 - [ ] Ratings (from our users)
 - [ ] Reviews
-- [ ] Admin user ability to send emails to any user's Kindle email
+- [x] Admin user ability to send emails to any user's Kindle email
 
 ## Local Development
 
