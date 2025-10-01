@@ -18,6 +18,14 @@ The application is built to use [Auth0](https://auth0.com/), [uploadthing](https
 - [Emailing with Resend](./docs/emailing.md)
 - [Uploading with uploadthing](./docs/uploading.md)
 
+## AI Workflow
+
+I am leveraging the following PRP workflow for any AI work:
+
+- https://github.com/Wirasm/PRPs-agentic-eng
+
+Follow the README in that repo to see the basic workflow and how to use it.
+
 ## TODOs
 
 MVP:
@@ -127,7 +135,6 @@ Other than that, deploying the application will mostly depend on which platform 
 ## Create T3 App
 
 This is a proud [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`. The [T3 Stack](https://create.t3.gg/) is awesome and I highly recommend you check it out and consider using it for your fullstack development needs.
-
 
 ### Learn More
 
