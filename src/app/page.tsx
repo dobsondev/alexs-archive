@@ -1,9 +1,12 @@
 import { auth } from '~/server/auth';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import SignInButton from '~/app/_components/SignInButton';
 
 export default async function HomePage() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   if (session) {
     redirect('/books');

@@ -9,6 +9,8 @@ description: |
 
 **Feature Goal**: Migrate authentication from Auth0 (third-party OAuth) to BetterAuth (self-hosted) in the Alex's Archive Next.js 15 application, eliminating external authentication dependencies while maintaining all existing functionality and user data.
 
+Users should be added manually and there should be no option to signup to the application. This can be done via the database or via an admin panel.
+
 **Deliverable**: Fully functional BetterAuth-based authentication system with:
 - All existing users migrated and able to authenticate
 - Email/password authentication working

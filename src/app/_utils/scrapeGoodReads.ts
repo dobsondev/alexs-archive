@@ -23,51 +23,77 @@ export async function scrapeGoodreads(goodreadsId: string): Promise<ScrapedBookD
     const html = response.data as string;
     const $ = cheerio.load(html);
 
-    // Extract the book title
-    const title = $('h1.Text__title1').text().trim();
+    // Find the Apollo state JSON embedded in the page
+    const scriptTags = $('script[type="application/json"]');
+    let apolloState: Record<string, any> = {};
 
-    // Extract the author name
-    const author = $('span.ContributorLink__name').first().text().trim();
-
-    // Extract the cover image
-    const imageUrl = $('img.ResponsiveImage').attr('src') ?? '';
-
-    // Extract the page count
-    let pageCount = 0;
-    $('div.FeaturedDetails').each((_, element) => {
-      const text = $(element).text();
-      if (text.includes('pages')) {
-        const pagesMatch = /(\d+)\s+pages/.exec(text);
-        if (pagesMatch?.[1]) {
-          pageCount = parseInt(pagesMatch[1], 10);
+    scriptTags.each((_, element) => {
+      const content = $(element).html();
+      if (content && content.includes('apolloState')) {
+        try {
+          const parsed = JSON.parse(content);
+          if (parsed.props?.pageProps?.apolloState) {
+            apolloState = parsed.props.pageProps.apolloState;
+          }
+        } catch (e) {
+          // Continue to next script tag
         }
       }
     });
 
-    const publishedDate = $('p[data-testid="publicationInfo"]').text().replace('First published', '').trim() ?? null;
+    // Find the book object in the Apollo state
+    let bookData: any = null;
+    for (const key in apolloState) {
+      if (key.startsWith('Book:')) {
+        bookData = apolloState[key];
+        break;
+      }
+    }
 
-    // Extract series information
-    const seriesElement = $('h3.Text.Text__title3.Text__italic:contains("#")');
+    if (!bookData) {
+      throw new Error('Could not find book data in Apollo state');
+    }
+
+    // Extract the book title
+    const title = bookData.title ?? '';
+
+    // Extract the author name (resolve the __ref to get the actual contributor object)
+    let author = '';
+    if (bookData.primaryContributorEdge?.node?.__ref) {
+      const contributorRef = bookData.primaryContributorEdge.node.__ref;
+      const contributorData = apolloState[contributorRef];
+      author = contributorData?.name ?? '';
+    } else if (bookData.primaryContributorEdge?.node?.name) {
+      author = bookData.primaryContributorEdge.node.name;
+    }
+
+    // Extract the cover image
+    const imageUrl = bookData.imageUrl ?? '';
+
+    // Extract the page count
+    const pageCount = bookData.details?.numPages ?? 0;
+
+    // Extract the published date
+    let publishedDate = null;
+    if (bookData.details?.publicationTime) {
+      const date = new Date(bookData.details.publicationTime);
+      publishedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    // Extract series information from bookSeries array (resolve the __ref)
     let series = null;
     let seriesNum = null;
 
-    if (seriesElement.length > 0) {
-      // Get the series info from the element text or the aria-label
-      const seriesText = seriesElement.text().trim() ?? seriesElement.attr('aria-label') ?? '';
+    if (bookData.bookSeries && bookData.bookSeries.length > 0) {
+      const seriesInfo = bookData.bookSeries[0];
+      seriesNum = seriesInfo.userPosition ? parseFloat(seriesInfo.userPosition) : null;
 
-      // If there's a link inside with more specific text, use that instead
-      const seriesLink = seriesElement.find('a');
-      const fullSeriesText = seriesLink.length > 0 ? seriesLink.text().trim() : seriesText;
-
-      // Simple split by '#' 
-      if (fullSeriesText.includes('#')) {
-        const parts = fullSeriesText.split('#');
-        if (parts[0]) {
-          series = parts[0].trim();
-        }
-        seriesNum = parts.length > 1 && parts[1] ? parseFloat(parts[1]) : null;
-      } else {
-        series = fullSeriesText;
+      if (seriesInfo.series?.__ref) {
+        const seriesRef = seriesInfo.series.__ref;
+        const seriesData = apolloState[seriesRef];
+        series = seriesData?.title ?? null;
+      } else if (seriesInfo.series?.title) {
+        series = seriesInfo.series.title;
       }
     }
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '~/app/_lib/auth-client';
 
 export interface KindleUser {
   name: string | null;

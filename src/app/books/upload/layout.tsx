@@ -1,18 +1,23 @@
 import { auth } from '~/server/auth';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 export default async function BookUploadLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   if (!session) {
     redirect("/");
   }
 
-  if (!session.user || !session.user.uploadPermission) {
+  // Type assertion for custom fields that exist in database
+  const user = session.user as typeof session.user & { uploadPermission?: boolean };
+  if (!user || !user.uploadPermission) {
     redirect("/books");
   }
 

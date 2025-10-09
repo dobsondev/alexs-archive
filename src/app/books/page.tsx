@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { type books } from '~/server/db/schema';
+import { useSession } from '~/app/_lib/auth-client';
 import Breadcrumbs from "~/app/_components/Breadcrumbs";
 import BookCard from "~/app/_components/BookCard";
 import BookSearch from "~/app/_components/BookSearch";
@@ -10,9 +12,18 @@ import { fuzzySearchBooks } from "~/app/_utils/fuzzySearch";
 type Book = typeof books.$inferSelect;
 
 export default function BookDashboard() {
+  const { data: session, isPending } = useSession();
+  const router = useRouter();
   const [allBooks, setAllBooks] = useState<Book[]>([]);
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Redirect to sign-in if not authenticated
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push('/sign-in');
+    }
+  }, [session, isPending, router]);
 
   useEffect(() => {
     async function fetchBooks() {
@@ -36,23 +47,29 @@ export default function BookDashboard() {
     setFilteredBooks(results);
   };
 
-  if (isLoading) {
+  // Show loading while checking auth or fetching books
+  if (isPending || isLoading) {
     return (
       <>
         <Breadcrumbs
           breadcrumbs={[
-            { 
-              label: 'Books', 
+            {
+              label: 'Books',
               href: '/books',
               active: true,
             }
           ]}
         />
         <main className="p-8">
-          <div className="text-center text-slate-400">Loading books...</div>
+          <div className="text-center text-slate-400">Loading...</div>
         </main>
       </>
     );
+  }
+
+  // Don't render content if not authenticated
+  if (!session) {
+    return null;
   }
 
   return (

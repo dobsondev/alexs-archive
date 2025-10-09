@@ -45,3 +45,7 @@ yarn-error.log*
 
 # idea files
 .idea
+
+# backup files
+books-backup.sql
+*-backup.sql

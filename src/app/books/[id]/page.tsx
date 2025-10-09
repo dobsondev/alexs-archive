@@ -9,8 +9,8 @@ type Book = typeof books.$inferSelect;
 
 export const dynamic = 'force-dynamic';
 
-export default async function BookPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function BookPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const book: Book | undefined = await db.query.books.findFirst({
     where: eq(books.id, parseInt(id, 10))
   });

@@ -8,13 +8,12 @@ I have leveraged the following services for this application:
 
 1. [Netlify](https://www.netlify.com/) (Free Tier) for deployments
 2. [Neon](https://neon.tech/) (Free Tier) for database hosting
-3. [Auth0](https://auth0.com/) (Free Tier) for authentication
+3. [BetterAuth](https://www.better-auth.com/) for authentication
 4. [uploadthing](https://uploadthing.com/) (Free Tier) for file uploads
 5. [Resend](https://resend.com/) (Free Tier) for emailing
 
-The application is built to use [Auth0](https://auth0.com/), [uploadthing](https://uploadthing.com/), and [Resend](https://resend.com/). You can easily use any deployment service and database provider that you wish though as there is no built in logic/code for those aspects of the application. If you are planning to setup this application yourself, you can refer to the following documentation for more detailed setup instructions on these three services:
+The application is built to use [BetterAuth](https://www.better-auth.com/), [uploadthing](https://uploadthing.com/), and [Resend](https://resend.com/). You can easily use any deployment service and database provider that you wish though as there is no built in logic/code for those aspects of the application. If you are planning to setup this application yourself, you can refer to the following documentation for more detailed setup instructions:
 
-- [Authentication with Auth0](./docs/authentication.md)
 - [Emailing with Resend](./docs/emailing.md)
 - [Uploading with uploadthing](./docs/uploading.md)
 
@@ -44,7 +43,8 @@ MVP:
 Nice to Have:
 - [x] Uploading only to select users
 - [x] Admin users
-- [ ] Admin user interface to give users ability to upload
+- [x] User creation script for manual user management
+- [x] Password change functionality
 - [x] Help page for how to setup Send-to-Kindle Emails and Approved Emails
 - [ ] Automatic Drizzle migrations via GitHub CI
 - [x] Searching
@@ -52,6 +52,7 @@ Nice to Have:
 - [ ] Ratings (from our users)
 - [ ] Reviews
 - [x] Admin user ability to send emails to any user's Kindle email
+- [x] Migration from Auth0 to BetterAuth
 
 ## Local Development
 
@@ -120,15 +121,49 @@ docker exec -t alexs-archive-db-1 pg_dump -U postgres postgres > docker/initdb/i
 This will then be used as the base of the database when you spin up the containers using
 `docker compose -f docker-compose.local-db.yml up`.
 
-## Deploying
+## Authentication
 
-The only real note on deploying this application is that you may need to add in the following environment variable to your deployment platform of choice depending on if they use a reverse proxy or not:
+This application uses [BetterAuth](https://www.better-auth.com/) for authentication with email/password login.
+
+### User Management
+
+Users are created manually by administrators using the `create-user` script:
 
 ```bash
-AUTH_TRUST_HOST=true
+# Create a regular user
+npm run create-user -- "User Name" user@example.com password123
+
+# Create an admin user with upload permissions
+npm run create-user -- "Admin User" admin@example.com securepass --admin --upload
+
+# Create a user with a Kindle email
+npm run create-user -- "Reader" reader@example.com pass123 --kindle=reader@kindle.com
+
+# Combine all options
+npm run create-user -- "Super Admin" admin@example.com pass --admin --upload --kindle=admin@kindle.com
 ```
 
-> When deploying your application behind a reverse proxy, you’ll need to set `AUTH_TRUST_HOST` equal to `true`. This tells Auth.js to trust the `X-Forwarded-Host` header from the reverse proxy. Auth.js will automatically infer this to be true if we detect the environment variable indicating that your application is running on one of the supported hosting providers.
+**Note:** The `--` separator is required to pass flags through npm correctly.
+
+### Custom User Fields
+
+- `uploadPermission` - Allows user to upload books
+- `isAdmin` - Grants admin privileges (can send books to other users' Kindle emails)
+- `kindleEmail` - User's Kindle email address for receiving books
+
+### Password Management
+
+Users can change their passwords through the Profile Settings page (`/user/profile`).
+
+## Deploying
+
+When deploying this application, ensure you have the following environment variables configured:
+
+- `DATABASE_URL` - PostgreSQL connection string
+- `BETTER_AUTH_SECRET` - Secret for BetterAuth (generate with `openssl rand -base64 32`)
+- `BETTER_AUTH_URL` - Your production URL (e.g., `https://yourapp.com`)
+- `UPLOADTHING_TOKEN` - UploadThing API token
+- `RESEND_API_KEY` - Resend API key
 
 Other than that, deploying the application will mostly depend on which platform you choose to use to deploy.
 
