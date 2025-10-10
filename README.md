@@ -198,6 +198,9 @@ When deploying this application, ensure you have the following environment varia
 
 Other than that, deploying the application will mostly depend on which platform you choose to use to deploy.
 
+On Netlify, pay special attention to false positives on secret detection especially for the `BETTER_AUTH_URL`:
+- https://docs.netlify.com/manage/security/secret-scanning/
+
 ## Create T3 App
 
 This is a proud [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`. The [T3 Stack](https://create.t3.gg/) is awesome and I highly recommend you check it out and consider using it for your fullstack development needs.
