@@ -1253,7 +1253,7 @@ if (result?.error) { /* handle error */ }
    BETTER_AUTH_URL=http://localhost:3000
 
    # Production
-   BETTER_AUTH_URL=https://yourdomain.com
+   BETTER_AUTH_URL=https://yourapp.com
    BETTER_AUTH_SECRET=<production-secret>
    ```
 
