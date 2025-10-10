@@ -1,87 +1,14 @@
 # BetterAuth Migration - Summary & Plan
 
+- `npm run db:migrate:dev`
+- `npm run import-books:dev books-backup.sql`
+- `npm run create-user:dev -- "Full Name" email@example.com password --admin --upload --kindle=email@kindle.com`
+
 ## Documentation Updates ✅
 
 - ✅ Updated `README.md` with BetterAuth information
 - ✅ Updated `CLAUDE.md` with BetterAuth architecture details
 - ✅ Created `docs/betterauth-migration.md` with step-by-step migration guide
-
-## Scripts Audit
-
-### Scripts to KEEP ✅
-
-1. **`scripts/create-user.ts`** - Primary user management tool
-   - Creates users with proper BetterAuth password hashing
-   - Supports admin, upload permission, and Kindle email flags
-   - Required for ongoing user management
-
-2. **`scripts/export-books.ts`** - Data backup utility
-   - Exports all books to SQL format
-   - Useful for backups and migrations
-   - Sets `created_by` to NULL for clean imports
-
-3. **`scripts/import-books.ts`** - Data restore utility
-   - Imports books from SQL backup
-   - Filters out dotenv output
-   - Useful for restoring data or migrating to new databases
-
-### Scripts to DELETE ❌
-
-1. **`scripts/create-admin.ts`** - Obsolete
-   - Replaced by `create-user` with `--admin --upload` flags
-   - Used old Auth0 approach
-
-2. **`scripts/create-admin-simple.ts`** - Obsolete
-   - Duplicate functionality, replaced by `create-user`
-
-3. **`scripts/create-admin-direct.ts`** - Obsolete
-   - Duplicate functionality, replaced by `create-user`
-
-4. **`scripts/make-admin.ts`** - Obsolete
-   - Used to upgrade existing users to admin
-   - With BetterAuth, easier to delete and recreate user with correct permissions
-
-5. **`scripts/check-user.ts`** - Redundant
-   - Can use Drizzle Studio (`npm run db:studio`) instead
-   - Manual database inspection is more flexible
-
-6. **`scripts/check-account.ts`** - Redundant
-   - Can use Drizzle Studio instead
-
-7. **`scripts/delete-user.ts`** - Redundant
-   - Can use Drizzle Studio or direct SQL
-   - Rarely needed operation
-
-8. **`scripts/add-type-column.ts`** - Migration-specific
-   - Was a one-time migration fix
-   - No longer needed with fresh schema
-
-## Cleanup Commands
-
-```bash
-# Remove obsolete scripts
-rm scripts/create-admin.ts
-rm scripts/create-admin-simple.ts
-rm scripts/create-admin-direct.ts
-rm scripts/make-admin.ts
-rm scripts/check-user.ts
-rm scripts/check-account.ts
-rm scripts/delete-user.ts
-rm scripts/add-type-column.ts
-
-# Optional: Remove Auth0 documentation
-rm docs/authentication.md
-```
-
-## Migration Approach: Fresh Database
-
-### Why Fresh Database?
-
-1. **Schema Alignment** - BetterAuth has specific field name requirements that differ from Auth0/NextAuth
-2. **Clean Start** - Avoids incremental migration conflicts and schema mismatches
-3. **Type Safety** - BetterAuth expects all auth tables to use `text` type (not `varchar`)
-4. **Field Names** - Different naming conventions (e.g., `accountId` vs `providerAccountId`)
-5. **Password Format** - Different hashing approach (scrypt vs bcrypt)
 
 ### Migration Steps Summary
 

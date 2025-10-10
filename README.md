@@ -127,23 +127,27 @@ This application uses [BetterAuth](https://www.better-auth.com/) for authenticat
 
 ### User Management
 
-Users are created manually by administrators using the `create-user` script:
+Users are created manually by administrators using environment-specific scripts. You must explicitly choose which environment (local or production) to create the user in:
 
 ```bash
-# Create a regular user
-npm run create-user -- "User Name" user@example.com password123
+# Create a regular user in local environment
+npm run create-user:local -- "User Name" user@example.com password123
 
-# Create an admin user with upload permissions
-npm run create-user -- "Admin User" admin@example.com securepass --admin --upload
+# Create an admin user with upload permissions in production
+npm run create-user:prod -- "Admin User" admin@example.com securepass --admin --upload
 
-# Create a user with a Kindle email
-npm run create-user -- "Reader" reader@example.com pass123 --kindle=reader@kindle.com
+# Create a user with a Kindle email in local environment
+npm run create-user:local -- "Reader" reader@example.com pass123 --kindle=reader@kindle.com
 
-# Combine all options
-npm run create-user -- "Super Admin" admin@example.com pass --admin --upload --kindle=admin@kindle.com
+# Combine all options for production
+npm run create-user:prod -- "Super Admin" admin@example.com pass --admin --upload --kindle=admin@kindle.com
 ```
 
-**Note:** The `--` separator is required to pass flags through npm correctly.
+**Available commands:**
+- `npm run create-user:local` - Creates user in `.env` database
+- `npm run create-user:prod` - Creates user in `.env.prod` database
+
+**Note:** The `--` separator is required to pass arguments through npm correctly.
 
 ### Custom User Fields
 
@@ -154,6 +158,33 @@ npm run create-user -- "Super Admin" admin@example.com pass --admin --upload --k
 ### Password Management
 
 Users can change their passwords through the Profile Settings page (`/user/profile`).
+
+### Data Management Scripts
+
+The application includes scripts for exporting and importing book data across environments:
+
+**Export books:**
+```bash
+# Export from local database
+npm run export-books:local > books-backup.sql
+
+# Export from production database
+npm run export-books:prod > books-backup-prod.sql
+```
+
+**Import books:**
+```bash
+# Import to local database
+npm run import-books:local -- books-backup.sql
+
+# Import to production database
+npm run import-books:prod -- books-backup.sql
+```
+
+These scripts are useful for:
+- Backing up book data
+- Migrating data between environments
+- Restoring data after database resets
 
 ## Deploying
 

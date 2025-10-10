@@ -1,14 +1,14 @@
 /**
- * Script to export all book data from production database
- * Run with: npx tsx scripts/export-books.ts > books-backup.sql
+ * Script to export all book data from database
+ * Run with:
+ *   npm run export-books:dev > books-backup.sql
+ *   npm run export-books:preview > books-backup-preview.sql
+ *   npm run export-books:prod > books-backup-prod.sql
  */
-
-import { config } from 'dotenv';
-config({ path: '.env.local' });
-config({ path: '.env' });
 
 import postgres from 'postgres';
 
+// Environment is loaded by dotenv-cli before this script runs
 async function exportBooks() {
   if (!process.env.DATABASE_URL) {
     console.error('Error: DATABASE_URL not found in environment variables');

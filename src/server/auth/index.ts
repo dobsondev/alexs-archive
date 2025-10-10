@@ -56,9 +56,12 @@ export const auth = betterAuth({
   },
 
   trustedOrigins: [
-    process.env.NODE_ENV === "production"
-      ? process.env.BETTER_AUTH_URL ?? ""
-      : "http://localhost:3000",
+    "http://localhost:3000", // Local development
+    process.env.BETTER_AUTH_URL ?? "", // Production URL
+    (url) => {
+      // Allow Netlify preview deployments: *-alexs-archive.netlify.app
+      return url.endsWith("-alexs-archive.netlify.app");
+    },
   ],
 });
 

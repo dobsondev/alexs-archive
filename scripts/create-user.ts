@@ -3,11 +3,9 @@ import postgres from "postgres";
 import * as schema from "../src/server/db/schema.js";
 import { eq } from "drizzle-orm";
 import crypto from "crypto";
-import dotenv from "dotenv";
 import { hashPassword } from "better-auth/crypto";
 
-dotenv.config();
-
+// Environment is loaded by dotenv-cli before this script runs
 // Create direct database connection without env validation
 const client = postgres(process.env.DATABASE_URL!);
 const db = drizzle(client, { schema });
@@ -78,11 +76,14 @@ async function createUser(options: UserOptions) {
 const args = process.argv.slice(2);
 
 if (args.length < 3) {
-  console.error("Usage: npm run create-user -- <name> <email> <password> [--admin] [--upload] [--kindle=email@kindle.com]");
+  console.error("Usage:");
+  console.error("  npm run create-user:dev -- <name> <email> <password> [--admin] [--upload] [--kindle=email@kindle.com]");
+  console.error("  npm run create-user:preview -- <name> <email> <password> [--admin] [--upload] [--kindle=email@kindle.com]");
+  console.error("  npm run create-user:prod -- <name> <email> <password> [--admin] [--upload] [--kindle=email@kindle.com]");
   console.error("\nExample:");
-  console.error("  npm run create-user -- \"John Doe\" john@example.com mypassword123");
-  console.error("  npm run create-user -- \"Admin User\" admin@example.com pass123 --admin --upload");
-  console.error("  npm run create-user -- \"Reader\" reader@example.com pass123 --kindle=reader@kindle.com");
+  console.error("  npm run create-user:dev -- \"John Doe\" john@example.com mypassword123");
+  console.error("  npm run create-user:prod -- \"Admin User\" admin@example.com pass123 --admin --upload");
+  console.error("  npm run create-user:preview -- \"Reader\" reader@example.com pass123 --kindle=reader@kindle.com");
   process.exit(1);
 }
 
