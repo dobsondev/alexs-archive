@@ -19,6 +19,7 @@
     "dev": "dotenv -e .env.dev -- next dev --turbo",
     "lint": "dotenv -e .env.dev -- next lint",
     "lint:fix": "dotenv -e .env.dev -- next lint --fix",
+    "lint:ci": "dotenv -e .env.example -- next lint",
     "preview": "next build && next start",
     "start": "next start",
     "typecheck": "tsc --noEmit",
