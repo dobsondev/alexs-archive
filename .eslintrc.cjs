@@ -13,6 +13,9 @@ const config = {
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked"
   ],
+  "ignorePatterns": [
+    "src/app/_utils/scrapeGoodReads.ts"
+  ],
   "rules": {
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/consistent-type-definitions": "off",

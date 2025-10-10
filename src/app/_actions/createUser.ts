@@ -4,6 +4,7 @@ import { auth } from '~/server/auth';
 import { headers } from 'next/headers';
 import { db } from '~/server/db';
 import { users } from '~/server/db/schema';
+import { eq } from 'drizzle-orm';
 
 export async function createUser(formData: FormData) {
   const session = await auth.api.getSession({
@@ -42,25 +43,24 @@ export async function createUser(formData: FormData) {
       },
     });
 
-    if (result.error) {
-      return { success: false, message: result.error.message };
+    // BetterAuth returns { user, session } on success or throws on error
+    if (!result.user) {
+      return { success: false, message: 'Failed to create user' };
     }
 
     // Update the user with custom permissions
-    if (result.data?.user) {
-      await db.update(users)
-        .set({
-          uploadPermission,
-          isAdmin,
-          emailVerified: true // Auto-verify admin-created users
-        })
-        .where((t, { eq }) => eq(t.id, result.data.user.id));
-    }
+    await db.update(users)
+      .set({
+        uploadPermission,
+        isAdmin,
+        emailVerified: true // Auto-verify admin-created users
+      })
+      .where(eq(users.id, result.user.id));
 
     return {
       success: true,
       message: `User ${name} created successfully`,
-      userId: result.data?.user.id
+      userId: result.user.id
     };
   } catch (error) {
     console.error('Failed to create user:', error);

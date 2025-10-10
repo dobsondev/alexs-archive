@@ -55,14 +55,25 @@ export const auth = betterAuth({
     useSecureCookies: process.env.NODE_ENV === "production",
   },
 
-  trustedOrigins: [
-    "http://localhost:3000", // Local development
-    process.env.BETTER_AUTH_URL ?? "", // Production URL
-    (url) => {
-      // Allow Netlify preview deployments: *-alexs-archive.netlify.app
-      return url.endsWith("-alexs-archive.netlify.app");
-    },
-  ],
+  trustedOrigins: async (request: Request) => {
+    const url = new URL(request.url);
+    const origin = url.origin;
+
+    // Local development
+    if (origin === "http://localhost:3000") return [origin];
+
+    // Production URL
+    if (process.env.BETTER_AUTH_URL && origin === process.env.BETTER_AUTH_URL) {
+      return [origin];
+    }
+
+    // Netlify preview deployments: *-alexs-archive.netlify.app
+    if (origin.endsWith("-alexs-archive.netlify.app")) {
+      return [origin];
+    }
+
+    return [];
+  },
 });
 
 // Export types for TypeScript

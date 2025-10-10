@@ -32,7 +32,7 @@ export default function SignInPage() {
 
       // Redirect to books page
       router.push('/books');
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
       setIsLoading(false);
     }
