@@ -3,10 +3,13 @@ import { db } from '~/server/db';
 import { auth } from '~/server/auth';
 import { users } from '~/server/db/schema';
 import { isNotNull } from 'drizzle-orm';
+import { headers } from 'next/headers';
 
 export async function GET() {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     
     if (!session?.user?.email) {
       return NextResponse.json(
@@ -17,7 +20,7 @@ export async function GET() {
 
     // Check if user has upload permission
     const currentUser = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.email, session.user.email!),
+      where: (users, { eq }) => eq(users.email, session.user.email),
       columns: {
         uploadPermission: true
       }

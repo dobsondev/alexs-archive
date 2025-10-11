@@ -1,6 +1,6 @@
 'use client';
 
-import { getUserProfile, updateKindleEmail } from '~/app/_actions/profile';
+import { getUserProfile, updateKindleEmail, changePassword } from '~/app/_actions/profile';
 import { useEffect, useState } from 'react';
 import Link from "next/link";
 
@@ -13,8 +13,10 @@ export default function ProfileSettingsPage() {
   } | null | undefined>(null);
   
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const [passwordMessage, setPasswordMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -39,21 +41,40 @@ export default function ProfileSettingsPage() {
     event.preventDefault();
     setIsSubmitting(true);
     setMessage(null);
-    
+
     const formData = new FormData(event.currentTarget);
     const result = await updateKindleEmail(formData);
-    
+
     if (result.success) {
       setMessage({ text: result.message, type: 'success' });
       // Update local state with new kindle email
-      setProfile(prev => 
+      setProfile(prev =>
         prev ? { ...prev, kindleEmail: formData.get('kindleEmail') as string } : null
       );
     } else {
       setMessage({ text: result.message, type: 'error' });
     }
-    
+
     setIsSubmitting(false);
+  };
+
+  const handlePasswordSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsPasswordSubmitting(true);
+    setPasswordMessage(null);
+
+    const formData = new FormData(event.currentTarget);
+    const result = await changePassword(formData);
+
+    if (result.success) {
+      setPasswordMessage({ text: result.message, type: 'success' });
+      // Reset form
+      event.currentTarget.reset();
+    } else {
+      setPasswordMessage({ text: result.message, type: 'error' });
+    }
+
+    setIsPasswordSubmitting(false);
   };
 
   if (isLoading) {
@@ -127,6 +148,71 @@ export default function ProfileSettingsPage() {
           className="px-4 py-2 text-white bg-purple-600 rounded-md hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Saving...' : 'Save Changes'}
+        </button>
+      </form>
+
+      <div className="border-t border-slate-700 my-8"></div>
+
+      <h2 className="text-xl font-bold mb-4">Change Password</h2>
+
+      {passwordMessage && (
+        <div className={`mb-6 p-4 rounded ${
+          passwordMessage.type === 'success' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'
+        }`}>
+          {passwordMessage.text}
+        </div>
+      )}
+
+      <form onSubmit={handlePasswordSubmit} className="space-y-6">
+        <div>
+          <label htmlFor="currentPassword" className="block text-sm font-medium mb-2">
+            Current Password
+          </label>
+          <input
+            type="password"
+            id="currentPassword"
+            name="currentPassword"
+            required
+            className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="newPassword" className="block text-sm font-medium mb-2">
+            New Password
+          </label>
+          <input
+            type="password"
+            id="newPassword"
+            name="newPassword"
+            required
+            minLength={8}
+            className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
+          />
+          <p className="mt-1 text-sm text-slate-400">
+            Password must be at least 8 characters long
+          </p>
+        </div>
+
+        <div>
+          <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2">
+            Confirm New Password
+          </label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+            className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={isPasswordSubmitting}
+          className="px-4 py-2 text-white bg-purple-600 rounded-md hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isPasswordSubmitting ? 'Changing Password...' : 'Change Password'}
         </button>
       </form>
     </main>

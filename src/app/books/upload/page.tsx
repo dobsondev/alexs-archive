@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import Breadcrumbs from "~/app/_components/Breadcrumbs";
 import { UploadButton } from "~/app/_utils/uploadthing";
 
 export default function UploadBookPage() {

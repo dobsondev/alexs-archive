@@ -8,15 +8,22 @@ I have leveraged the following services for this application:
 
 1. [Netlify](https://www.netlify.com/) (Free Tier) for deployments
 2. [Neon](https://neon.tech/) (Free Tier) for database hosting
-3. [Auth0](https://auth0.com/) (Free Tier) for authentication
+3. [BetterAuth](https://www.better-auth.com/) for authentication
 4. [uploadthing](https://uploadthing.com/) (Free Tier) for file uploads
 5. [Resend](https://resend.com/) (Free Tier) for emailing
 
-The application is built to use [Auth0](https://auth0.com/), [uploadthing](https://uploadthing.com/), and [Resend](https://resend.com/). You can easily use any deployment service and database provider that you wish though as there is no built in logic/code for those aspects of the application. If you are planning to setup this application yourself, you can refer to the following documentation for more detailed setup instructions on these three services:
+The application is built to use [BetterAuth](https://www.better-auth.com/), [uploadthing](https://uploadthing.com/), and [Resend](https://resend.com/). You can easily use any deployment service and database provider that you wish though as there is no built in logic/code for those aspects of the application. If you are planning to setup this application yourself, you can refer to the following documentation for more detailed setup instructions:
 
-- [Authentication with Auth0](./docs/authentication.md)
 - [Emailing with Resend](./docs/emailing.md)
 - [Uploading with uploadthing](./docs/uploading.md)
+
+## AI Workflow
+
+I am leveraging the following PRP workflow for any AI work:
+
+- https://github.com/Wirasm/PRPs-agentic-eng
+
+Follow the README in that repo to see the basic workflow and how to use it.
 
 ## TODOs
 
@@ -36,7 +43,8 @@ MVP:
 Nice to Have:
 - [x] Uploading only to select users
 - [x] Admin users
-- [ ] Admin user interface to give users ability to upload
+- [x] User creation script for manual user management
+- [x] Password change functionality
 - [x] Help page for how to setup Send-to-Kindle Emails and Approved Emails
 - [ ] Automatic Drizzle migrations via GitHub CI
 - [x] Searching
@@ -44,6 +52,7 @@ Nice to Have:
 - [ ] Ratings (from our users)
 - [ ] Reviews
 - [x] Admin user ability to send emails to any user's Kindle email
+- [x] Migration from Auth0 to BetterAuth
 
 ## Local Development
 
@@ -112,22 +121,94 @@ docker exec -t alexs-archive-db-1 pg_dump -U postgres postgres > docker/initdb/i
 This will then be used as the base of the database when you spin up the containers using
 `docker compose -f docker-compose.local-db.yml up`.
 
-## Deploying
+## Authentication
 
-The only real note on deploying this application is that you may need to add in the following environment variable to your deployment platform of choice depending on if they use a reverse proxy or not:
+This application uses [BetterAuth](https://www.better-auth.com/) for authentication with email/password login.
+
+### User Management
+
+Users are created manually by administrators using environment-specific scripts. You must explicitly choose which environment (local or production) to create the user in:
 
 ```bash
-AUTH_TRUST_HOST=true
+# Create a regular user in local environment
+npm run create-user:local -- "User Name" user@example.com password123
+
+# Create an admin user with upload permissions in production
+npm run create-user:prod -- "Admin User" admin@example.com securepass --admin --upload
+
+# Create a user with a Kindle email in local environment
+npm run create-user:local -- "Reader" reader@example.com pass123 --kindle=reader@kindle.com
+
+# Combine all options for production
+npm run create-user:prod -- "Super Admin" admin@example.com pass --admin --upload --kindle=admin@kindle.com
 ```
 
-> When deploying your application behind a reverse proxy, you’ll need to set `AUTH_TRUST_HOST` equal to `true`. This tells Auth.js to trust the `X-Forwarded-Host` header from the reverse proxy. Auth.js will automatically infer this to be true if we detect the environment variable indicating that your application is running on one of the supported hosting providers.
+**Available commands:**
+- `npm run create-user:local` - Creates user in `.env` database
+- `npm run create-user:prod` - Creates user in `.env.prod` database
+
+**Note:** The `--` separator is required to pass arguments through npm correctly.
+
+### Custom User Fields
+
+- `uploadPermission` - Allows user to upload books
+- `isAdmin` - Grants admin privileges (can send books to other users' Kindle emails)
+- `kindleEmail` - User's Kindle email address for receiving books
+
+### Password Management
+
+Users can change their passwords through the Profile Settings page (`/user/profile`).
+
+### Data Management Scripts
+
+The application includes scripts for exporting and importing book data across environments:
+
+**Export books:**
+```bash
+# Export from local database
+npm run export-books:local > books-backup.sql
+
+# Export from production database
+npm run export-books:prod > books-backup-prod.sql
+```
+
+**Import books:**
+```bash
+# Import to local database
+npm run import-books:local -- books-backup.sql
+
+# Import to production database
+npm run import-books:prod -- books-backup.sql
+```
+
+These scripts are useful for:
+- Backing up book data
+- Migrating data between environments
+- Restoring data after database resets
+
+## Deploying
+
+When deploying this application, ensure you have the following environment variables configured:
+
+- `DATABASE_URL` - PostgreSQL connection string
+- `BETTER_AUTH_SECRET` - Secret for BetterAuth (generate with `openssl rand -base64 32`)
+- `BETTER_AUTH_URL` - Your production URL (e.g., `https://yourapp.com`)
+- `UPLOADTHING_TOKEN` - UploadThing API token
+- `RESEND_API_KEY` - Resend API key
 
 Other than that, deploying the application will mostly depend on which platform you choose to use to deploy.
+
+On Netlify, pay special attention to false positives on secret detection especially for the `BETTER_AUTH_URL`:
+- https://docs.netlify.com/manage/security/secret-scanning/
+
+Also make sure to add the `NEXT_PUBLIC_BETTER_AUTH_URL` on Netlify. You can use the `$DEPLOY_PRIME_URL` for dynamic deployment URLs along with the `netlify.toml` file as seen in this repo.
+
+- https://docs.netlify.com/build/configure-builds/environment-variables/#deploy-urls-and-metadata
+- https://docs.netlify.com/build/configure-builds/environment-variables/#use-variables-in-the-netlifytoml-or-netlify-ui
 
 ## Create T3 App
 
 This is a proud [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`. The [T3 Stack](https://create.t3.gg/) is awesome and I highly recommend you check it out and consider using it for your fullstack development needs.
-
 
 ### Learn More
 

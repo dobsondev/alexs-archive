@@ -5,9 +5,12 @@ import { db } from '~/server/db';
 import { auth } from '~/server/auth';
 import { users } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { headers } from 'next/headers';
 
 export async function sendToKindle(title: string, uploadthingUrl: string, targetKindleEmail?: string) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   
   if (!session?.user?.email) {
     return { success: false, message: 'You must be logged in to send books to Kindle' };

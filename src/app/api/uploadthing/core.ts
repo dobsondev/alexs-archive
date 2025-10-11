@@ -20,12 +20,14 @@ export const ourFileRouter = {
     },
   })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ files }) => {
+    .middleware(async ({ files, req }) => {
       // This code runs on your server before upload
-      const session = await auth();
+      const session = await auth.api.getSession({
+        headers: req.headers,
+      });
 
       // If you throw, the user will not be able to upload
-      if (!session || !session.user) throw new Error("Unauthorized");
+      if (!session?.user) throw new Error("Unauthorized");
       if (!files?.[0]) throw new Error("No file uploaded");
 
       let bookData = null;

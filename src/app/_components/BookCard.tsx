@@ -51,6 +51,7 @@ export default function BookCard({ book }: { book: Book }) {
     return (
       <div className="book-card border border-slate-800 rounded-md p-4 grid sm:grid-cols-2 gap-6">
         <div className="col-span-1">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={book.imageUrl} alt="{book.title} Cover" className="rounded-md w-full h-auto" />
         </div>
         <div className="col-span-1">

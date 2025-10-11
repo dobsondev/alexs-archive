@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[context.deploy-preview]
+  # DEPLOY_PRIME_URL is the canonical URL for this specific deployment
+  command = "export NEXT_PUBLIC_BETTER_AUTH_URL=\"$DEPLOY_PRIME_URL\" && npm run build"
+
