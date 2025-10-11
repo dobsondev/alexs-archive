@@ -3,6 +3,6 @@
   publish = ".next"
 
 [context.deploy-preview]
-  # Need to inject the DEPLOY_URL variable from Netlify for previews...
-  command = "export NEXT_PUBLIC_BETTER_AUTH_URL=\"$DEPLOY_URL\" && npm run build"
+  # DEPLOY_PRIME_URL is the canonical URL for this specific deployment
+  command = "export NEXT_PUBLIC_BETTER_AUTH_URL=\"$DEPLOY_PRIME_URL\" && npm run build"
 
