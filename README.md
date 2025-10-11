@@ -201,7 +201,10 @@ Other than that, deploying the application will mostly depend on which platform 
 On Netlify, pay special attention to false positives on secret detection especially for the `BETTER_AUTH_URL`:
 - https://docs.netlify.com/manage/security/secret-scanning/
 
-Also make sure to add the `NEXT_PUBLIC_BETTER_AUTH_URL` on Netlify. You can use the `${DEPLOY_URL}` for dynamic deployment URLs.
+Also make sure to add the `NEXT_PUBLIC_BETTER_AUTH_URL` on Netlify. You can use the `DEPLOY_URL` for dynamic deployment URLs along with the `netlify.toml` file as seen in this repo.
+
+- https://docs.netlify.com/build/configure-builds/environment-variables/#deploy-urls-and-metadata
+- https://docs.netlify.com/build/configure-builds/environment-variables/#use-variables-in-the-netlifytoml-or-netlify-ui
 
 ## Create T3 App
 
