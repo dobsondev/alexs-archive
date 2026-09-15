@@ -1,3 +1,6 @@
+> [!NOTE]
+> I use [Grimmory](https://github.com/grimmory-tools/grimmory) now instead of my own solution. Highly recommend!
+
 # Alex's Archive
 
 This application is a storage solution for my own eBook files.
